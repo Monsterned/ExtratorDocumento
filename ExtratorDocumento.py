@@ -11,6 +11,10 @@ class XMLExtractorApp:
         # Configurar o tamanho da janela
         self.root.geometry("800x600")  # Largura x Altura
 
+        # Adicionar o botão "Nova Consulta" no canto superior esquerdo
+        self.new_search_button = tk.Button(root, text="Nova Consulta", command=self.new_search, font=("Arial", 12))
+        self.new_search_button.place(x=10, y=10, anchor='nw')  # Ajuste a posição conforme necessário
+
         # Configurar o layout da interface
         self.label = tk.Label(root, text="Escolha arquivos XML:", font=("Arial", 12))
         self.label.pack(pady=20)
@@ -29,12 +33,12 @@ class XMLExtractorApp:
         self.import_button = tk.Button(root, text="Importar", command=self.save_to_txt, font=("Arial", 12))
         self.import_button.place(x=760, y=50, anchor='ne')  # Ajuste a posição conforme necessário
 
+        # Inicializar a lista de números
         self.numbers = []
 
     def load_files(self):
         file_paths = filedialog.askopenfilenames(filetypes=[("XML files", "*.xml")])
         if file_paths:
-            self.numbers = []  # Limpar números anteriores
             for file_path in file_paths:
                 try:
                     # Processar o XML
@@ -65,7 +69,7 @@ class XMLExtractorApp:
                 except Exception as e:
                     self.numbers.append(f"Erro ao processar o arquivo {file_path}: {e}")
 
-            # Exibir todos os números encontrados
+            # Exibir todos os números encontrados até agora
             result_text = "\n".join(self.numbers)
             self.result_label.config(text=result_text)
 
@@ -76,6 +80,12 @@ class XMLExtractorApp:
             messagebox.showinfo("Sucesso", "Números salvos no arquivo 'numeros_encontrados.txt'.")
         else:
             messagebox.showwarning("Aviso", "Nenhum número encontrado para salvar.")
+
+    def new_search(self):
+        # Limpar todas as pesquisas e resultados
+        self.numbers = []
+        self.result_label.config(text="")
+        messagebox.showinfo("Nova Consulta", "Todas as pesquisas foram limpas.")
 
 if __name__ == "__main__":
     root = tk.Tk()
